@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.forgerock.openicf.bundles</groupId>
+        <artifactId>bundles-parent</artifactId>
+        <version>1.1.0-SNAPSHOT</version>
+        <relativePath>../../maven/bundles-parent</relativePath>
+    </parent>
+    <artifactId>vms</artifactId>
+    <packaging>jar</packaging>
+    <name>VMS Connector</name>
+    <description>Connector for VMS</description>
+
+    <properties>
+        <skipTests>true</skipTests>
+        <embedded.dependencies>patternparser,oro,expect4j</embedded.dependencies>
+        <connectorName>org.identityconnectors.vms.VmsConnector</connectorName>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.forgerock.openicf.bundles</groupId>
+            <artifactId>patternparser</artifactId>
+            <version>1.1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>oro</groupId>
+            <artifactId>oro</artifactId>
+            <version>2.0.8</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.com.p.expect4j</groupId>
+            <artifactId>expect4j</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <!-- http://expect4j.googlecode.com/files/expect4j-1.0.jar -->
+            <systemPath>${basedir}/lib/expect4j-1.0.jar</systemPath>
+        </dependency>
+    </dependencies>
+
+</project>
