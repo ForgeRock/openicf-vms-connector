@@ -22,6 +22,10 @@
  */
 package org.identityconnectors.vms;
 
+import org.testng.annotations.Test;
+import org.testng.annotations.BeforeClass;
+import org.testng.AssertJUnit;
+import org.testng.Assert;
 import static org.identityconnectors.vms.VmsConstants.*;
 
 import java.text.MessageFormat;
@@ -37,8 +41,6 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.regex.Pattern;
-
-import junit.framework.Assert;
 
 import org.identityconnectors.common.l10n.CurrentLocale;
 import org.identityconnectors.common.security.GuardedString;
@@ -70,9 +72,7 @@ import org.identityconnectors.framework.common.objects.filter.OrFilter;
 import org.identityconnectors.framework.common.objects.filter.StartsWithFilter;
 import org.identityconnectors.test.common.PropertyBag;
 import org.identityconnectors.test.common.TestHelpers;
-import org.junit.BeforeClass;
 import org.junit.Ignore;
-import org.junit.Test;
 
 
 public class VmsConnectorTests {
@@ -103,9 +103,9 @@ public class VmsConnectorTests {
         HOST_NAME         = testProps.getStringProperty("HOST_NAME");
         SYSTEM_PASSWORD   = testProps.getStringProperty("SYSTEM_PASSWORD");
         SYSTEM_USER       = testProps.getStringProperty("SYSTEM_USER");
-        Assert.assertNotNull("HOST_NAME must be specified", HOST_NAME);
-        Assert.assertNotNull("SYSTEM_PASSWORD must be specified", SYSTEM_PASSWORD);
-        Assert.assertNotNull("SYSTEM_USER must be specified", SYSTEM_USER);
+        AssertJUnit.assertNotNull("HOST_NAME must be specified", HOST_NAME);
+        AssertJUnit.assertNotNull("SYSTEM_PASSWORD must be specified", SYSTEM_PASSWORD);
+        AssertJUnit.assertNotNull("SYSTEM_USER must be specified", SYSTEM_USER);
     }
 
     @Test
@@ -138,15 +138,16 @@ public class VmsConnectorTests {
         testScriptOnResource(context, config);
     }
 
-    private void testScriptOnResource(ScriptContext context,
+    @Test(enabled = false)
+	private void testScriptOnResource(ScriptContext context,
             VmsConfiguration config) throws Exception {
         VmsConnector info = createConnector(config);
         try {
             HashMap<String, Object> optionsMap = new HashMap<String, Object>();
             OperationOptions options = new OperationOptions(optionsMap);
             String[] results = (String[])info.runScriptOnResource(context, options);
-            Assert.assertTrue(results[1], results[1].contains(config.getUserName().toUpperCase()));
-            Assert.assertTrue(results[1], results[1].contains("Hello World"));
+            AssertJUnit.assertTrue(results[1], results[1].contains(config.getUserName().toUpperCase()));
+            AssertJUnit.assertTrue(results[1], results[1].contains("Hello World"));
         } finally {
             info.dispose();
         }
@@ -159,7 +160,7 @@ public class VmsConnectorTests {
             config.setHostPortNumber(100000);
             try {
                 config.validate();
-                Assert.fail("no exception for bad port");
+                AssertJUnit.fail("no exception for bad port");
             } catch (Exception e) {
                 // expected
             }
@@ -183,7 +184,7 @@ public class VmsConnectorTests {
             VmsConfiguration config = createConfiguration();
             config.setHostLineTerminator(null);
             config.validate();
-            Assert.fail("expected exception");
+            AssertJUnit.fail("expected exception");
         } catch (RuntimeException rte) {
             // expected
         }
@@ -191,7 +192,7 @@ public class VmsConnectorTests {
             VmsConfiguration config = createConfiguration();
             config.setSSH(null);
             config.validate();
-            Assert.fail("expected exception");
+            AssertJUnit.fail("expected exception");
         } catch (RuntimeException rte) {
             // expected
         }
@@ -199,7 +200,7 @@ public class VmsConnectorTests {
             VmsConfiguration config = createConfiguration();
             config.setHostShellPrompt(null);
             config.validate();
-            Assert.fail("expected exception");
+            AssertJUnit.fail("expected exception");
         } catch (RuntimeException rte) {
             // expected
         }
@@ -207,7 +208,7 @@ public class VmsConnectorTests {
             VmsConfiguration config = createConfiguration();
             config.setHostNameOrIpAddr(null);
             config.validate();
-            Assert.fail("expected exception");
+            AssertJUnit.fail("expected exception");
         } catch (RuntimeException rte) {
             // expected
         }
@@ -215,7 +216,7 @@ public class VmsConnectorTests {
             VmsConfiguration config = createConfiguration();
             config.setHostPortNumber(null);
             config.validate();
-            Assert.fail("expected exception");
+            AssertJUnit.fail("expected exception");
         } catch (RuntimeException rte) {
             // expected
         }
@@ -223,7 +224,7 @@ public class VmsConnectorTests {
             VmsConfiguration config = createConfiguration();
             config.setUserName(null);
             config.validate();
-            Assert.fail("expected exception");
+            AssertJUnit.fail("expected exception");
         } catch (RuntimeException rte) {
             // expected
         }
@@ -231,7 +232,7 @@ public class VmsConnectorTests {
             VmsConfiguration config = createConfiguration();
             config.setPassword(null);
             config.validate();
-            Assert.fail("expected exception");
+            AssertJUnit.fail("expected exception");
         } catch (RuntimeException rte) {
             // expected
         }
@@ -243,9 +244,9 @@ public class VmsConnectorTests {
         VmsConnector info = createConnector(config);
         
         for (String string : new String[] { "12", "foo", "foo123" })
-            Assert.assertEquals(string, info.quoteForAuthorizeWhenNeeded(string));
+            AssertJUnit.assertEquals(string, info.quoteForAuthorizeWhenNeeded(string));
         for (String string : new String[] { "1 2", "foo ", "foo!123", "foo\"bar\"" , "foo(bar)" })
-            Assert.assertFalse(string.equals(info.quoteForAuthorizeWhenNeeded(string)));
+            AssertJUnit.assertFalse(string.equals(info.quoteForAuthorizeWhenNeeded(string)));
     }
 
     @Test
@@ -302,8 +303,8 @@ public class VmsConnectorTests {
                     }
                     count++;
                 }
-                Assert.assertTrue(count==1);
-                Assert.assertTrue(found);
+                AssertJUnit.assertTrue(count==1);
+                AssertJUnit.assertTrue(found);
             }
             // Filter on Uid
             //
@@ -319,8 +320,8 @@ public class VmsConnectorTests {
                     }
                     count++;
                 }
-                Assert.assertTrue(count==1);
-                Assert.assertTrue(found);
+                AssertJUnit.assertTrue(count==1);
+                AssertJUnit.assertTrue(found);
             }
             
             // retry, but specify only 2 attributes
@@ -339,13 +340,13 @@ public class VmsConnectorTests {
                         found = true;
                         // Name, Uid forced in
                         //
-                        Assert.assertEquals(4, user.getAttributes().size());
+                        AssertJUnit.assertEquals(4, user.getAttributes().size());
                         System.out.println(user);
                     }
                     count++;
                 }
-                Assert.assertTrue(count==1);
-                Assert.assertTrue(found);
+                AssertJUnit.assertTrue(count==1);
+                AssertJUnit.assertTrue(found);
             }
         } finally {
             info.dispose();
@@ -422,8 +423,8 @@ public class VmsConnectorTests {
             }
             count++;
         }
-        Assert.assertTrue(!exactlyOne || count==1);
-        Assert.assertTrue(shouldFind==found);
+        AssertJUnit.assertTrue(!exactlyOne || count==1);
+        AssertJUnit.assertTrue(shouldFind==found);
     }
     
     // We have an issue that VMS disables a terminal (remote or local)
@@ -453,7 +454,7 @@ public class VmsConnectorTests {
                 //
                 try {
                     info.create(ObjectClass.ACCOUNT, attrs, null);
-                    Assert.fail("Didn't catch create existing user");
+                    AssertJUnit.fail("Didn't catch create existing user");
                 } catch (AlreadyExistsException e) {
                     // We expect this
                 }
@@ -466,13 +467,14 @@ public class VmsConnectorTests {
         testAuthenticate(getTestUser(), "password");
         try {
             testAuthenticate(getTestUser(), "password123");
-            Assert.fail("authenticate should have failed");
+            AssertJUnit.fail("authenticate should have failed");
         } catch (ConnectorException e) {
-            Assert.assertTrue(e.toString().contains("User authorization failure"));
+            AssertJUnit.assertTrue(e.toString().contains("User authorization failure"));
         }
     }
     
-    private void testAuthenticate(String userName, String passwordString) throws Exception {
+    @Test(enabled = false)
+	private void testAuthenticate(String userName, String passwordString) throws Exception {
         VmsConfiguration config = createConfiguration();
         config.setUserName(userName);
         GuardedString password = new GuardedString(passwordString.toCharArray());
@@ -499,8 +501,8 @@ public class VmsConnectorTests {
                 }
                 count++;
             }
-            Assert.assertTrue(count==0);
-            Assert.assertTrue(!found);
+            AssertJUnit.assertTrue(count==0);
+            AssertJUnit.assertTrue(!found);
         } finally {
             info.dispose();
         }
@@ -522,7 +524,7 @@ public class VmsConnectorTests {
             ConnectorObject user = getUser(getTestUser());
             Attribute primedays = user.getAttributeByName(ATTR_PRIMEDAYS);
             List<Object> oldList = primedays.getValue();
-            Assert.assertFalse(oldList.contains(DAYS_WED));
+            AssertJUnit.assertFalse(oldList.contains(DAYS_WED));
             List<Object> newList = new LinkedList<Object>();
             newList.addAll(oldList);
             newList.add(DAYS_WED);
@@ -537,7 +539,7 @@ public class VmsConnectorTests {
             user = getUser(getTestUser());
             primedays = user.getAttributeByName(ATTR_PRIMEDAYS);
             oldList = primedays.getValue();
-            Assert.assertTrue(oldList.contains(DAYS_WED));
+            AssertJUnit.assertTrue(oldList.contains(DAYS_WED));
         } finally {
             info.dispose();
         }
@@ -569,8 +571,8 @@ public class VmsConnectorTests {
                  ConnectorObject user = getUser(getTestUser()+"Z", attributesToGet);
      
                  Attribute grants = user.getAttributeByName(ATTR_GRANT_IDS);
-                 Assert.assertTrue(grants.getValue().size()==1);
-                 Assert.assertTrue(grants.getValue().contains("GOO124"));
+                 AssertJUnit.assertTrue(grants.getValue().size()==1);
+                 AssertJUnit.assertTrue(grants.getValue().contains("GOO124"));
              }
             
             // Verify we can delete an existing grant, and add a new one
@@ -589,8 +591,8 @@ public class VmsConnectorTests {
                  ConnectorObject user = getUser(getTestUser()+"Z", attributesToGet);
      
                  Attribute grants = user.getAttributeByName(ATTR_GRANT_IDS);
-                 Assert.assertTrue(grants.getValue().size()==1);
-                 Assert.assertTrue(grants.getValue().contains("NET$MANAGE"));
+                 AssertJUnit.assertTrue(grants.getValue().size()==1);
+                 AssertJUnit.assertTrue(grants.getValue().contains("NET$MANAGE"));
              }
         } finally {
             info.dispose();
@@ -673,7 +675,7 @@ public class VmsConnectorTests {
             info.create(ObjectClass.ACCOUNT, attrs, null);
             try {
                 testModifyUserAttribute(info, AttributeBuilder.build(OperationalAttributes.PASSWORD_NAME, new GuardedString("Foo!Bar".toCharArray())), true);
-                Assert.fail("no exception thrown");
+                AssertJUnit.fail("no exception thrown");
             } catch (IllegalArgumentException iae) {
                 // expected
             }
@@ -822,7 +824,7 @@ public class VmsConnectorTests {
                 expire = user.getAttributeByName(OperationalAttributes.PASSWORD_EXPIRATION_DATE_NAME);
                 Object expireValue = AttributeUtil.getSingleValue(expire);
                 long expireLong = ((Number)expireValue).longValue();
-                Assert.assertTrue(expireLong > new Date().getTime());
+                AssertJUnit.assertTrue(expireLong > new Date().getTime());
             }
             // Show that we can expire (this should also for expired to be true)
             //
@@ -846,8 +848,8 @@ public class VmsConnectorTests {
                 expire = user.getAttributeByName(OperationalAttributes.PASSWORD_EXPIRED_NAME);
                 Assert.assertTrue(AttributeUtil.getBooleanValue(expire));
                 Attribute expireDate = user.getAttributeByName(OperationalAttributes.PASSWORD_EXPIRATION_DATE_NAME);
-                Assert.assertTrue(AttributeUtil.getLongValue(expireDate) > (now-120000));
-                Assert.assertTrue(AttributeUtil.getLongValue(expireDate) < new Date().getTime());
+                AssertJUnit.assertTrue(AttributeUtil.getLongValue(expireDate) > (now-120000));
+                AssertJUnit.assertTrue(AttributeUtil.getLongValue(expireDate) < new Date().getTime());
             }
             // Show that we can expire never (this should also for expired to be false)
             //
@@ -865,7 +867,7 @@ public class VmsConnectorTests {
                 expire = user.getAttributeByName(OperationalAttributes.PASSWORD_EXPIRED_NAME);
                 Assert.assertFalse(AttributeUtil.getBooleanValue(expire));
                 Attribute expireDate = user.getAttributeByName(OperationalAttributes.PASSWORD_EXPIRATION_DATE_NAME);
-                Assert.assertTrue(AttributeUtil.getIntegerValue(expireDate) == never);
+                AssertJUnit.assertTrue(AttributeUtil.getIntegerValue(expireDate) == never);
             }
         } finally {
             info.dispose();
@@ -887,20 +889,23 @@ public class VmsConnectorTests {
         testBadValue(AttributeBuilder.build(ATTR_PRIVILEGES, badFlags));
     }
 
-    private void testBadValue(Attribute attribute) throws Exception {
+    @Test(enabled = false)
+	private void testBadValue(Attribute attribute) throws Exception {
         VmsConfiguration config = createConfiguration();
         try {
             VmsAttributeValidator.validate(attribute.getName(), attribute.getValue(), config);
-            Assert.fail("Attribute should not have been valid");
+            AssertJUnit.fail("Attribute should not have been valid");
         } catch (RuntimeException rte) {
             // expected failure
         }
     }
-    private void testModifyUserAttribute(VmsConnector connector, Attribute attribute) throws Exception {
+    @Test(enabled = false)
+	private void testModifyUserAttribute(VmsConnector connector, Attribute attribute) throws Exception {
         testModifyUserAttribute(connector, attribute, true);
     }
 
-    private void testModifyUserAttribute(VmsConnector connector, Attribute attribute, boolean check) throws Exception {
+    @Test(enabled = false)
+	private void testModifyUserAttribute(VmsConnector connector, Attribute attribute, boolean check) throws Exception {
         ConnectorObjectBuilder builder = new ConnectorObjectBuilder();
         builder.setUid(getTestUser());
         builder.setName(getTestUser());
@@ -913,7 +918,7 @@ public class VmsConnectorTests {
             Attribute newAttribute = user.getAttributeByName(attribute.getName());
             Object one = attribute.getValue();
             Object two = newAttribute.getValue();
-            Assert.assertEquals(one, two);
+            AssertJUnit.assertEquals(one, two);
         }
     }
 
@@ -964,7 +969,7 @@ public class VmsConnectorTests {
             //
             try {
                 info.create(ObjectClass.ACCOUNT, attrs, null);
-                Assert.fail("Didn't catch create existing user");
+                AssertJUnit.fail("Didn't catch create existing user");
             } catch (AlreadyExistsException e) {
                 // We expect this
             }
@@ -1005,7 +1010,8 @@ public class VmsConnectorTests {
     }
 
     //@Test
-    public void testChangeOwnPassword() throws Exception {
+    @Test
+	public void testChangeOwnPassword() throws Exception {
         String localUserName = getTestUser()+"X";
         VmsConfiguration config = createConfiguration();
         VmsConnector info = createConnector(config);
@@ -1062,7 +1068,7 @@ public class VmsConnectorTests {
                 builder.addAttribute(password);
                 ConnectorObject newUser = builder.build();
                 info.update(newUser.getObjectClass(), newUser.getAttributes(), null);
-                Assert.fail("should have thrown exception");
+                AssertJUnit.fail("should have thrown exception");
             } catch (ConnectorException ce) {
                 ce.printStackTrace();
             }
@@ -1091,7 +1097,7 @@ public class VmsConnectorTests {
                 accountSeen = true;
             }
         }
-        Assert.assertTrue(accountSeen);
+        AssertJUnit.assertTrue(accountSeen);
     }
 
     @Test
@@ -1103,11 +1109,12 @@ public class VmsConnectorTests {
         testDelta(500+12*1000+6*1000*60+60*60*1000+3*24*60*60*1000, "3-1:6:12.50");
     }
     
-    private void testDelta(long delta, String expectedValue) {
+    @Test(enabled = false)
+	private void testDelta(long delta, String expectedValue) {
         List<Object> values = new LinkedList<Object>();
         values.add(delta);
         VmsConnector.remapToDelta(values);
-        Assert.assertEquals(expectedValue, values.get(0));
+        AssertJUnit.assertEquals(expectedValue, values.get(0));
     }
 
     @Test
@@ -1117,29 +1124,29 @@ public class VmsConnectorTests {
         {
             List<Object> values = new LinkedList<Object>();
             values.add("NONE");
-            Assert.assertFalse(new VmsAttributeValidator.ValidDate().isValid(values));
+            AssertJUnit.assertFalse(new VmsAttributeValidator.ValidDate().isValid(values));
         }
         {
             List<Object> values = new LinkedList<Object>();
             values.add("01-Jan-2008");
-            Assert.assertTrue(new VmsAttributeValidator.ValidDate().isValid(values));
+            AssertJUnit.assertTrue(new VmsAttributeValidator.ValidDate().isValid(values));
         }
         // Test dateOrNone validator
         //
         {
             List<Object> values = new LinkedList<Object>();
             values.add("ZOOM");
-            Assert.assertFalse(new VmsAttributeValidator.ValidDateOrNone().isValid(values));
+            AssertJUnit.assertFalse(new VmsAttributeValidator.ValidDateOrNone().isValid(values));
         }
         {
             List<Object> values = new LinkedList<Object>();
             values.add("NONE");
-            Assert.assertTrue(new VmsAttributeValidator.ValidDateOrNone().isValid(values));
+            AssertJUnit.assertTrue(new VmsAttributeValidator.ValidDateOrNone().isValid(values));
         }
         {
             List<Object> values = new LinkedList<Object>();
             values.add("01-Jan-2008");
-            Assert.assertTrue(new VmsAttributeValidator.ValidDateOrNone().isValid(values));
+            AssertJUnit.assertTrue(new VmsAttributeValidator.ValidDateOrNone().isValid(values));
         }
     }
 
@@ -1174,7 +1181,7 @@ public class VmsConnectorTests {
             //
             try {
                 info.delete(ObjectClass.ACCOUNT, deleteUid, null);
-                Assert.fail("NO exception deleting non-existent user");
+                AssertJUnit.fail("NO exception deleting non-existent user");
             } catch (UnknownUidException uue) {
                 // Expected
             }
@@ -1221,7 +1228,7 @@ public class VmsConnectorTests {
                 TestHandler handler = new TestHandler();
                 try {
                     TestHelpers.search(info,ObjectClass.ACCOUNT, null, handler, options);
-                    Assert.fail("No execption thrown");
+                    AssertJUnit.fail("No execption thrown");
                 } catch (IllegalArgumentException iae) {
                     // Exception expected
                 }
@@ -1249,7 +1256,7 @@ public class VmsConnectorTests {
             deleteUser(userName, connector);
             try {
                 connector.resolveUsername(ObjectClass.ACCOUNT, userName, new OperationOptions(new HashMap()));
-                Assert.fail("exception expected");
+                AssertJUnit.fail("exception expected");
             } catch (UnknownUidException ue) {
                 // expected
             }
@@ -1259,7 +1266,7 @@ public class VmsConnectorTests {
             Uid newUid = connector.create(ObjectClass.ACCOUNT, attrs, null);
             System.out.println(newUid.getValue()+" created");
             Uid retrievedUid = connector.resolveUsername(ObjectClass.ACCOUNT, userName, new OperationOptions(new HashMap()));
-            Assert.assertEquals(newUid, retrievedUid);
+            AssertJUnit.assertEquals(newUid, retrievedUid);
         } finally {
             connector.dispose();
         }
