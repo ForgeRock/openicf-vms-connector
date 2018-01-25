@@ -27,7 +27,7 @@
     <parent>
         <groupId>org.forgerock.openicf.connectors</groupId>
         <artifactId>connectors-parent</artifactId>
-        <version>1.5.0.0-SNAPSHOT</version>
+        <version>1.5.0.0</version>
     </parent>
     <groupId>org.forgerock.openicf.connectors</groupId>
     <artifactId>vms-connector</artifactId>
@@ -68,9 +68,9 @@
             </snapshots>
         </repository>
         <repository>
-            <id>forgerock-snapshots-repository</id>
-            <name>ForgeRock Snapshot Repository</name>
-            <url>http://maven.forgerock.org/repo/snapshots</url>
+            <id>forgerock-private-releases</id>
+            <name>ForgeRock Private Releases Repository</name>
+            <url>http://maven.forgerock.org/repo/private-releases</url>
             <releases>
                 <enabled>false</enabled>
             </releases>
@@ -84,7 +84,7 @@
         <dependency>
             <groupId>org.forgerock.openicf.misc</groupId>
             <artifactId>patternparser</artifactId>
-            <version>1.1.0.0-SNAPSHOT</version>
+            <version>1.1.0.0</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
