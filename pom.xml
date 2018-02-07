@@ -22,7 +22,8 @@
  your own identifying information:
  "Portions Copyrighted [year] [name of copyright owner]"
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.forgerock.openicf.connectors</groupId>
@@ -35,19 +36,15 @@
     <packaging>bundle</packaging>
     <name>VMS Connector</name>
     <description>Connector for VMS</description>
-    <url>http://openicf.forgerock.org/connectors/vms-connector</url>
+    <url>https://github.com/ForgeRock/openicf-vms-connector</url>
     <issueManagement>
-        <system>jira</system>
-        <url>https://bugster.forgerock.org/jira/browse/OPENICF/component/10184</url>
+        <system>github</system>
+        <url>https://github.com/ForgeRock/openicf-vms-connector/issues</url>
     </issueManagement>
-    <ciManagement>
-        <system>jenkins</system>
-        <url>https://ci.forgerock.org/view/OpenICF/job/OpenICF - vms-connector - postcommit/</url>
-    </ciManagement>
     <scm>
-        <connection>scm:git:ssh://git@stash.forgerock.org:7999/openicf/vms-connector.git</connection>
-        <developerConnection>scm:git:ssh://git@stash.forgerock.org:7999/openicf/vms-connector.git</developerConnection>
-        <url>http://stash.forgerock.org/projects/OPENICF/repos/vms-connector/browse/</url>
+        <connection>scm:git:git@github.com:forgerock/openicf-vms-connector.git</connection>
+        <developerConnection>scm:git:git@github.com:forgerock/openicf-vms-connector.git</developerConnection>
+        <url>scm:git:git@github.com:forgerock/openicf-vms-connector.git</url>
     </scm>
     <properties>
         <maven.compiler.target>1.7</maven.compiler.target>
